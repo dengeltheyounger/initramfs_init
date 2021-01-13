@@ -50,19 +50,14 @@ int make_path_static(const char *begin,
 
 char *make_path(const char *begin, const char *end, int slash);
 
-/* Used by get password. Will read a line from stdin, and uses
- * dynamic memory allocation.
- *
- * Returns number of characters in buffer or -1 for error
- */
-int getline_custom(char **lineptr);
-
 // These are useful utilities that can help with debugging
 
 #ifdef DEBUG
 
 /* Iterate through directories. Provide a callback so that we can
- * provide a generic way to handle different directories
+ * provide a generic way to handle different directories. The primary
+ * purpose of this is to look through proc in order to figure what 
+ * files are open in a given filesystem
  */
 
 int iterate_directories(char *path, 
