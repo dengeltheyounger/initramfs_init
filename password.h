@@ -1,7 +1,7 @@
 #ifndef PASSWORD_H
 #define PASSWORD_H
 #include <termios.h>
-#include <stdio.h>
+#include "secure_getline.h"
 
 /* Get password from user.
  * Return number of characters.

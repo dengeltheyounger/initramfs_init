@@ -17,7 +17,7 @@ size_t get_password(char **line) {
 	if (tcsetattr (fileno (stdin), TCSAFLUSH, &after) != 0)
 		return 0;
 
-	getline_custom(line);
+	size_t read = secure_getline(line);
 		
 	// restore terminal
 	tcsetattr (fileno (stdin), TCSAFLUSH, &before);

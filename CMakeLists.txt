@@ -10,7 +10,7 @@ set(CMAKE_C_STANDARD 99)
 # Make the executable from init.c and switch_root.c
 
 add_executable(init init.c logger.c cleanup.c password.c utilities.c
-	switch_root.c)
+	switch_root.c secure_getline.c)
 
 add_compile_options(-ldl -lpthread)
 
