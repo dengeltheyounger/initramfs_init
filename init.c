@@ -111,16 +111,16 @@ int decrypt_detached(const char *root_path,
 
 	// Create new path to key file
 	int result = make_path_static("/mnt/key", 
-					key_name, 
-					&bptr, 
-					size, 0);
+				key_name, 
+				&bptr, 
+				size, 0);
 
 	if (!result) {
-		write_logger(attention, 
-				"Failed to create path to key file!\n");
+		write_logger(attention, "Failed to create path for %s!\n", 
+				key_name);
 		return 0;
 	}
-	
+
 	// initialize root drive specifying path to header
 	result = crypt_init_data_device(&drive, "/mnt/crypt/header.img", 
 							root_path);
@@ -171,7 +171,8 @@ int decrypt_detached(const char *root_path,
  */
 
 int open_drive(const char *root_path, 
-		const char *boot_path, 
+		const char *boot_path,
+		const char *crypt_key_name,
 		const char *key_name) {
 
 	int result = 0;
@@ -192,8 +193,26 @@ int open_drive(const char *root_path,
 		return 0;
 	}
 
-	// Open the second device
-	struct crypt_device *second = decrypt_device("/mnt/crypt/key.img", 
+	// Create a path for the encrypted keyfile
+	size_t key_path_size = strlen("/mnt/crypt/");
+	size_t crypt_name_size = strlen(crypt_key_name);
+	size_t total_size = key_path_size + crypt_name_size + 1;
+	char crypt_key_path[total_size];
+	char *crypt_ptr = crypt_key_path;
+	memset(crypt_key_path, 0, total_size);
+	result = make_path_static("/mnt/crypt", 
+				crypt_key_name, 
+				&crypt_ptr,
+				total_size,
+				0);
+
+	if (!result) {
+		write_logger(attention, "Failed to create path for %s!\n", 
+				crypt_key_name);
+		crypt_free(first);
+		return 0;
+	}
+	struct crypt_device *second = decrypt_device(crypt_key_path, 
 							"cryptkey");
 
 	if (!second) {
@@ -331,7 +350,7 @@ int main() {
 						strerror(errno));
 
 	// Open the encrypted drive
-	if (!open_drive("/dev/nvme0n1p3", "/dev/nvme0n1p2", "key")) 
+	if (!open_drive("/dev/nvme0n1p3", "/dev/nvme0n1p2", "key.img", "key"))
 		write_and_die("Failed to open encrypted drive!\n");	
 
 	// activate vg SYSTEM, and lvs
