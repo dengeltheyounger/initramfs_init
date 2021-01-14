@@ -1,5 +1,5 @@
-#ifndef	GETLINE_PASSWD_H
-#define	GETLINE_PASSWD_H
+#ifndef SECURE_GETLINE_H
+#define	SECURE_GETILNE_H
 #include <stdlib.h>
 #include <stddef.h>
 #include <unistd.h>
@@ -10,6 +10,6 @@
  * This is a utility function that is used in get_password
  */
 
-int secure_getline(char **lineptr);
+size_t secure_getline(char **lineptr);
 
 #endif

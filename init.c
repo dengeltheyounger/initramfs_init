@@ -58,11 +58,10 @@ struct crypt_device *decrypt_device(const char *path, const char *name) {
 		charnum = get_password(&buffer);
 
 		// If get_password fails, then silently go to next loop
-		if (charnum == 0)
+		if (charnum == 0) {
+			memset(buffer, 0, strlen(buffer));
 			continue;
-
-		// remove the delimiter
-		buffer[charnum-1] = 0;
+		}
 
 		// Open encrypted drives read only
 		result = crypt_activate_by_passphrase(handle,
@@ -280,6 +279,7 @@ int set_lvm(const char *gname, ...) {
 	// Any of these errors are a deal breaker, so we'll exit in each case
 	if (!libh) {
 		write_logger(critical, "Failed to create lvm handler!\n");
+		va_end(vols);
 		return 0;
 	}
 
@@ -291,6 +291,7 @@ int set_lvm(const char *gname, ...) {
 	if (!vg) {
 		write_logger(critical, "Failed to create vg handler!\n");
 		lvm_quit(libh);
+		va_end(vols);
 		return 0;
 	}
 

@@ -55,7 +55,7 @@ int secure_realloc(char **buffer, size_t old_size, size_t new_size) {
 	return 1;
 }
 
-int secure_getline(char **lineptr) {
+size_t secure_getline(char **lineptr) {
 	*lineptr = NULL;
 	int char_num = 0;
 	int success = 0;
@@ -69,7 +69,7 @@ int secure_getline(char **lineptr) {
 	
 	// Exit failure
 	if (!success)
-		return -1;
+		return 0;
 
 	/* Keep getting input until we hit an error, newline, or EOF.
 	 * Store in buffer and account for backspaces
@@ -95,7 +95,7 @@ int secure_getline(char **lineptr) {
 			new_size = round_nearest_2(++old_size);	
 			success = secure_realloc(lineptr, old_size, new_size);
 			if (!success)
-				return -1;
+				return 0;
 		}
 
 		c = 0;
