@@ -1,0 +1,34 @@
+This repository contains the source code to compile an init program that
+is meant to be run in the initramfs. 
+
+The source code assumes that the user has an encrypted boot partition.
+It assumes that inside of the encrypted boot partition is a header file
+for the encrypted root partition as well as an encrypted keyfile. How to
+do this is mostly explained in the Arch Wiki. I usually look up "Arch Wiki
+detached LUKS header", and that usually gives me the right result.
+
+The header is expected to be named "header.img". The path of the partition
+that contains the root filesystem can be specified as arguments in open_drive
+in init.c. The same goes for the path of the encrypted boot partition and the
+name of the keyfile.
+
+It is expected that the initramfs is built hosted in /usr/src/initramfs.
+It is expected that all relevant libraries are contained within
+/usr/src/initramfs/lib64. CMakeLists.txt should have the all of the
+necessary libraries listed.
+
+There are two particular reasons I wante dto do this. The first is that 
+with the amount of security specified in the Arch Wiki, it seems like 
+you'd want to avoid using a BusyBox shell, since that could 
+theoretically be exploited by an attacker. In addition, I was able 
+to ensure that the line buffer used in get_password was not only freed, 
+but also zeroed prior to erasure. 
+
+This might also benefit people who want a more practical understanding
+of libcryptsetup and liblvm2app. There honestly isn't a lot of 
+documentation on the practical side of either, and so learning how to use
+them took a lot of trial and error.
+
+This is kept under a GPL2 license. You can use it and modify it as you wish.
+If there are any security vulnerabilities, let me know. I've never done
+anything like this before, and so I'm very new to this.
