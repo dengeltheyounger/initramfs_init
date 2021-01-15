@@ -387,5 +387,5 @@ int main() {
 
 	close_console(fd);
 
-	switch_root("/mnt/root", "/bin/sh");
+	switch_root("/mnt/root", "/sbin/openrc-init");
 }

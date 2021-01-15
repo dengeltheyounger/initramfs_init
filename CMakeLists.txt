@@ -36,4 +36,5 @@ target_link_libraries(init /usr/src/initramfs/lib64/liblvm2app.so.2.2
 			/usr/src/initramfs/lib64/ld-linux-x86-64.so.2
 			/usr/src/initramfs/lib64/libuuid.so.1
 			/usr/src/initramfs/lib64/libcrypto.so.1.1
-			/usr/src/initramfs/lib64/libz.so.1)
+			/usr/src/initramfs/lib64/libz.so.1
+			/usr/src/initramfs/lib64/libgcc_s.so.1)
